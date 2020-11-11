@@ -1,3 +1,9 @@
+resource_types:
+- name: kubernetes
+  type: docker-image
+  source:
+    repository: jcderr/concourse-kubernetes-resource
+
 resources:
 - name: chachkies-source
   type: git
@@ -12,6 +18,18 @@ resources:
     password: ((docker-hub-password))
     repository: ((docker-hub-username))/concourse-tutorial-chachkies
 
+- name: chachkies-k8s
+  type: kubernetes
+  source:
+    namespace: default
+    cluster_url: https://kubernetes.default.svc
+    resource_type: deployment
+    resource_name: chachkies
+    container_name: chachkies
+    # cluster_ca: _base64 encoded CA pem_
+    # admin_key: _base64 encoded key pem_
+    # admin_cert: _base64 encoded certificate pem_
+
 jobs:
 - name: publish
   public: true
@@ -21,3 +39,10 @@ jobs:
   - put: chachkies-image
     params:
       build: chachkies-source
+- name: run-chachkies-in-k8s
+  plan:
+  - put: chachkies-k8s
+    params:
+      image_name: ci/image
+      image_tag: ci/tag
+
