@@ -20,4 +20,4 @@ jobs:
   - get: chachkies-source
   - put: chachkies-image
     params:
-      build: ci/docker
+      build: chachkies-source
