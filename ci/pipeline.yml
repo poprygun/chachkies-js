@@ -3,7 +3,7 @@ resources:
   type: git
   source:
     uri: https://github.com/poprygun/chachkies-js.git
-    branch: develop
+    branch: master
 
 - name: chachkies-image
   type: docker-image
