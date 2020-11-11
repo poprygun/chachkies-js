@@ -1,0 +1,23 @@
+resources:
+- name: chachkies-source
+  type: git
+  source:
+    uri: https://github.com/poprygun/chachkies-js.git
+    branch: develop
+
+- name: chachkies-image
+  type: docker-image
+  source:
+    username: ((docker-hub-username))
+    password: ((docker-hub-password))
+    repository: ((docker-hub-username))/concourse-tutorial-chachkies
+
+jobs:
+- name: publish
+  public: true
+  serial: true
+  plan:
+  - get: chachkies-source
+  - put: chachkies-image
+    params:
+      build: ci/docker
